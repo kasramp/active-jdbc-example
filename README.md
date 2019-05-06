@@ -1,6 +1,2 @@
-
-
-### Cheat sheet
-
-- mvn db-migrator:create
-- mvn db-migrator:migrate
+# active-jdbc-example
+An example to demonstrate how to wire up ActiveJDBC with Spring Boot
