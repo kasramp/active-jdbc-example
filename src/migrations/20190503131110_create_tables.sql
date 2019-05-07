@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-  id INTEGER DEFAULT NULL AUTO_INCREMENT PRIMARY KEY,
+  id INTEGER AUTO_INCREMENT PRIMARY KEY,
   email_address VARCHAR(512) NOT NULL,
   first_name VARCHAR(512) NOT NULL,
   last_name VARCHAR(512) NOT NULL,
@@ -35,6 +35,6 @@ CREATE TABLE IF NOT EXISTS playlist_song (
   playlist_id INTEGER NOT NULL,
   song_id INTEGER NOT NULL,
 
-  CONSTRAINT fk_playlist_song_playlist_id FOREIGN KEY (playlist_id) REFERENCES playlists (id),
-  CONSTRAINT fk_playlist_song_song_id FOREIGN KEY (song_id) REFERENCES songs (id)
+  CONSTRAINT fk_playlist_song_playlist_id FOREIGN KEY (playlist_id) REFERENCES playlists (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_playlist_song_song_id FOREIGN KEY (song_id) REFERENCES songs (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine=InnoDB;

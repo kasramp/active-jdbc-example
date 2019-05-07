@@ -1,8 +1,10 @@
 package com.madadipouya.example.activejdbc.activejdbcexample.model;
 
 import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.annotations.Many2Many;
 import org.javalite.activejdbc.annotations.Table;
 
+@Many2Many(other = Playlist.class, join = "playlist_song", sourceFKName = "song_id", targetFKName = "playlist_id")
 @Table("songs")
 public class Song extends Model {
 

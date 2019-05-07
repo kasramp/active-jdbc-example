@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/v1/users")
+@RequestMapping("/v1/songs")
 @RestController
 public class SongController {
 
@@ -58,9 +58,10 @@ public class SongController {
     public void deleteSong(@PathVariable int songId) throws SongNotFoundException {
         Song song = Song.findById(songId);
         if (song != null) {
-            song.delete();
+            song.deleteCascadeShallow();
+        } else {
+            throw new SongNotFoundException(String.format("There is no song associated with id: %s", songId));
         }
-        throw new SongNotFoundException(String.format("There is no song associated with id: %s", songId));
     }
 
     public static class SongDto {

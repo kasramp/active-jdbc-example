@@ -8,4 +8,20 @@ public class Playlist extends Model {
 
     // Should be able to pull S lists and U from it
     private static final String PLAYLIST_NAME_FIELD = "name";
+
+    static {
+        validatePresenceOf(PLAYLIST_NAME_FIELD);
+    }
+
+    public Playlist() {
+
+    }
+
+    public Playlist(String name) {
+        set(PLAYLIST_NAME_FIELD, name);
+    }
+
+    public Playlist merge(String name) {
+        return set(PLAYLIST_NAME_FIELD, name);
+    }
 }

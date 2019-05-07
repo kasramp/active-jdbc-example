@@ -59,8 +59,9 @@ public class UserController {
         User user = User.findById(userId);
         if (user != null) {
             user.deleteCascade();
+        } else {
+            throw new UserNotFoundException(String.format("There is no user associated with id: %s", userId));
         }
-        throw new UserNotFoundException(String.format("There is no user associated with id: %s", userId));
     }
 
     @PutMapping(value = "/{userId}")
