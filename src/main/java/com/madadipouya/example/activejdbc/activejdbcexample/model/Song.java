@@ -8,14 +8,9 @@ import org.javalite.activejdbc.annotations.Table;
 @Table("songs")
 public class Song extends Model {
 
-    // Should be able to retrieve U from S
-
     private static final String TITLE_FIELD = "title";
 
     private static final String ARTIST_FIELD = "artist";
-
-    private static final String USER_ID_FIELD = "user_id";
-
 
     static {
         validatePresenceOf(TITLE_FIELD, ARTIST_FIELD);
