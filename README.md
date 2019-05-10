@@ -14,13 +14,13 @@ This example provides three controllers as follows:
 
 ## How to run
 
-+ First start the `docker-compose.yml` file by running:
+First start the `docker-compose.yml` file by running:
 
 ```bash
 $ docker-compose -f docker-compose.yml up -d 
 ```
 
-+ To run create database and tables run `dbupdate` profile as below:
+To run create database run `dbcreate` profile as below:
 
 ```bash
 $ ./mvnw clean compile -P dbcreate
@@ -28,13 +28,15 @@ $ ./mvnw clean compile -P dbcreate
 
 That executes `db-migrator:create` goal.
 
-+ And finally to run the application run:
+
+And finally to run the application run:
 
 ```bash
 $ ./mvn clean compile -P developer
 ```
 
 The developer profile also takes care of generating the instruments as well as updating the db schema by running `db-migrator:migrate` goal. So you don't need to worry about it.
+
 
 Once everything is up and running open the browser and go to [http://localhost:8080](http://localhost:8080). You should see Swagger to interact with.
 
