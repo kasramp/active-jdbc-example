@@ -66,6 +66,31 @@
                 <plugins>
                     <plugin>
                         <groupId>org.javalite</groupId>
+                        <artifactId>db-migrator-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <configFile>${project.basedir}/src/main/resources/database.properties</configFile>
+                            <environments>development</environments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>dev_migrations</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>migrate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>8.0.16</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.javalite</groupId>
                         <artifactId>activejdbc-instrumentation</artifactId>
                         <version>2.2</version>
                         <executions>
@@ -94,6 +119,42 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>dbcreate</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.javalite</groupId>
+                        <artifactId>db-migrator-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <configFile>${project.basedir}/src/main/resources/database.properties</configFile>
+                            <environments>development</environments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>dev_db_create</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>create</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>8.0.16</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <build>
@@ -114,31 +175,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.javalite</groupId>
-                <artifactId>db-migrator-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <configFile>${project.basedir}/src/main/resources/database.properties</configFile>
-                    <environments>development</environments>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>dev_migrations</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>migrate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>8.0.16</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
