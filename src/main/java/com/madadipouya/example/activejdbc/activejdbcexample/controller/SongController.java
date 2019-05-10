@@ -65,7 +65,6 @@ public class SongController {
     }
 
     public static class SongDto {
-
         @NotBlank
         private String title;
 

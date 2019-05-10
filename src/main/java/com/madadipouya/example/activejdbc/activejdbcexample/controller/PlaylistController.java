@@ -37,13 +37,7 @@ public class PlaylistController {
     public List<Map<?, Object>> getPlaylistWithSongs(@PathVariable int userId) throws UserNotFoundException {
         User user = User.findById(userId);
         if (user != null) {
-            return user.getAll(Playlist.class).stream()
-                    .map(playlist ->
-                            ImmutableMap.builder()
-                                    .putAll(playlist.toMap())
-                                    .put("songs", playlist.getAll(Song.class).toMaps())
-                                    .build())
-                    .collect(Collectors.toList());
+            return createPlaylistWithSongsResponse(user);
         }
         throw new UserNotFoundException(String.format("There is no user associated with id: %s", userId));
     }
@@ -53,12 +47,9 @@ public class PlaylistController {
     public Map<String, Object> createPlaylist(@PathVariable int userId, @Valid @RequestBody PlaylistDto playlistDto) throws UserNotFoundException {
         User user = User.findById(userId);
         if (user != null) {
-            List<Song> songs = user.getAll(Song.class)
-                    .stream().filter(song -> playlistDto.songIds.contains(song.getId()))
-                    .collect(Collectors.toList());
             Playlist playlist = new Playlist(playlistDto.name);
             user.add(playlist);
-            songs.forEach(playlist::add);
+            addSongsToPlaylist(playlist, filterInvalidSongs(user, playlistDto));
             return playlist.toMap();
         }
         throw new UserNotFoundException(String.format("There is no user associated with id: %s", userId));
@@ -70,17 +61,11 @@ public class PlaylistController {
         Playlist playlist = Playlist.findById(playlistId);
         if (playlist != null) {
             User user = User.findById(playlist.get("user_id"));
-            List<Song> songs = user.getAll(Song.class)
-                    .stream().filter(song -> playlistDto.songIds.contains(song.getId()))
-                    .collect(Collectors.toList());
             playlist.merge(playlistDto.name);
             if (playlist.saveIt()) {
-                songs.forEach(playlist::remove);
-                songs.forEach(playlist::add);
+                updatePlaylist(playlist, filterInvalidSongs(user, playlistDto));
             }
-            return user.getAll(Playlist.class).stream().map(p -> ImmutableMap.builder()
-                    .putAll(p.toMap()).put("songs", p.getAll(Song.class).toMaps())
-                    .build()).collect(Collectors.toList());
+            return createPlaylistWithSongsResponse(user);
         }
         throw new PlaylistNotFoundException(String.format("There is no playlist associated with id: %s", playlistId));
     }
@@ -94,6 +79,25 @@ public class PlaylistController {
         } else {
             throw new PlaylistNotFoundException(String.format("There is no playlist associated with id: %s", playlistId));
         }
+    }
+
+    private void addSongsToPlaylist(Playlist playlist, List<Song> songs) {
+        songs.forEach(playlist::add);
+    }
+
+    private void updatePlaylist(Playlist playlist, List<Song> songs) {
+        songs.forEach(playlist::remove);
+        addSongsToPlaylist(playlist, songs);
+    }
+
+    private List<Song> filterInvalidSongs(User user, PlaylistDto playlistDto) {
+        return user.getAll(Song.class).stream().filter(song -> playlistDto.songIds.contains(song.getId()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Map<?, Object>> createPlaylistWithSongsResponse(User user) {
+        return user.getAll(Playlist.class).stream().map(playlist -> ImmutableMap.builder().putAll(playlist.toMap())
+                .put("songs", playlist.getAll(Song.class).toMaps()).build()).collect(Collectors.toList());
     }
 
     public static class PlaylistDto {

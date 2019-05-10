@@ -19,3 +19,4 @@ This example provides three controllers as follows:
 
 - mvn db-migrator:create
 - mvn db-migrator:migrate
+            

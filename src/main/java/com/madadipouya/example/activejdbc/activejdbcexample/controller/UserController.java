@@ -3,10 +3,8 @@ package com.madadipouya.example.activejdbc.activejdbcexample.controller;
 import com.google.common.collect.ImmutableMap;
 import com.madadipouya.example.activejdbc.activejdbcexample.controller.exceptions.UserNotFoundException;
 import com.madadipouya.example.activejdbc.activejdbcexample.model.Playlist;
-import com.madadipouya.example.activejdbc.activejdbcexample.model.User;
 import com.madadipouya.example.activejdbc.activejdbcexample.model.Song;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.madadipouya.example.activejdbc.activejdbcexample.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -34,13 +30,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Map<?, ?>> getUsersWithDetails() {
-        return User.findAll().stream().map(user -> {
-            return ImmutableMap.builder()
-                    .putAll(user.toMap())
-                    .put("songs", user.getAll(Song.class).toMaps())
-                    .put("playlists", user.getAll(Playlist.class).toMaps())
-                    .build();
-        }).collect(Collectors.toList());
+        return User.findAll().stream().map(user -> ImmutableMap.builder().putAll(user.toMap())
+                .put("songs", user.getAll(Song.class).toMaps()).put("playlists", user.getAll(Playlist.class).toMaps())
+                .build()).collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.CREATED)
