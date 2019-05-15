@@ -33,7 +33,7 @@ That executes `db-migrator:create` goal.
 And finally to run the application run:
 
 ```bash
-$ ./mvn clean compile -P developer
+$ ./mvnw clean compile -P developer
 ```
 
 The developer profile also takes care of generating the instruments as well as updating the db schema by running `db-migrator:migrate` goal. So you don't need to worry about it.
