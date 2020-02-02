@@ -4,7 +4,7 @@ This example demonstrates how to wire up ActiveJDBC with Spring Boot in replacem
 
 You can find the tutorial about this example at the below link:
 
-https://blog.madadipouya.com/2019/05/15/how-to-use-activejdbc-with-spring-boot/
+https://geekyhacker.com/2019/05/15/how-to-use-activejdbc-with-spring-boot/
 
 
 This example provides three controllers as follows:
